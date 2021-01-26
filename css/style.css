@@ -1,0 +1,70 @@
+/* LOADER */
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url(../img/system/loading.gif) center no-repeat #fff;
+}
+
+body{
+	background: grey;
+	font-family: Arial, Helvetica, Verdana;
+}
+
+#screen {
+	display: flex;
+	wrap: nowrap;
+}
+
+#game{
+    margin: 0 auto;
+}
+
+canvas {
+	background:#1e1a1a;
+	border:3px ridge;
+	/*cursor: none;*/
+}
+
+span {
+	display:block;
+}
+
+.invisible {
+	display: none;
+}
+
+#log, #log2{
+	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color: white;
+
+	background: black;
+	text-align:left;
+	width: 400px;
+	border: 1px solid white;
+	padding:5px;
+	margin: 0 5px
+}
+
+#log p, #log2 p {
+	padding:0;
+	margin:0;
+}
+
+.log_title {
+	font-size: 13px;
+	font-weight: bold;
+	color: red;
+}
+
+footer {
+	text-align: center;
+	margin: 15px;
+}

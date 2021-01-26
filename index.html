@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Avenger Invasion</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="css/style.css" type="text/css">
+
+		<!-- favicon -->
+		<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<!--<script type="text/javascript" src="js/jquery-3.0.0.min.js"></script>-->
+		<script type="text/javascript" src="js/game.js"></script>
+
+		<!--Preload -->
+		<script type="text/javascript" src="js/preloader.js"></script>
+
+		<!-- Google Font -->
+		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+
+
+	</head>
+		<div class="se-pre-con"></div>
+		<div id="screen">
+
+			<div id="log">
+				<p class="log_title">SCORE</p>
+				<p id="scorelog"></p>
+				<p class="log_title">Ship Log:</p>
+				<p id="shiplog"></p>
+				<p class="log_title">Shipshot Log:</p>
+				<p id="shipshotlog"></p>
+				<p class="log_title">Background Log:</p>
+				<p id="backgroundlog"></p>
+				<p class="log_title">Bad Guy:</p>
+				<p id="badguylog"></p>
+			</div>
+
+			<div id="game">
+				<canvas width="960" height="540" id="mycanvas">
+				  Browser not suported :(
+				</canvas>
+			</div>
+
+			<div id="log2">Log2:<br /></div>
+
+		</div>
+		<div id="game-images" class="invisible">
+			<!--Ship-->
+			<img id="ship" src="img/spaceship/ship.gif">
+			<img id="ship_l" src="img/spaceship/ship_l.gif">
+			<img id="ship_r" src="img/spaceship/ship_r.gif">
+			<img id="ship_u" src="img/spaceship/ship_u.gif">
+			<img id="ship_ur" src="img/spaceship/ship_ur.gif">
+			<img id="ship_ul" src="img/spaceship/ship_ul.gif">
+			<!--Ship Shot-->
+			<img id="shipshot" src="img/spaceship/ship_shot_blue.gif">
+			<!--Background-->
+			<img id="background00" src="img/backgrounds/00.png">
+			<img id="background01" src="img/backgrounds/01.png">
+			<img id="background10" src="img/backgrounds/10.png">
+			<img id="background11" src="img/backgrounds/11.png">
+			<img id="background20" src="img/backgrounds/20.png">
+			<img id="background21" src="img/backgrounds/21.png">
+			<!--Bad Guys-->
+			<img id="badguy01" src="img/badguys/badguy01.gif">
+			<img id="badguy02" src="img/badguys/badguy02.gif">
+			<img id="badguy03" src="img/badguys/badguy03.gif">
+			<img id="badguy04" src="img/badguys/badguy04.gif">
+			<img id="badguy05" src="img/badguys/badguy05.gif">
+			<img id="badguy06" src="img/badguys/badguy06.gif">
+    </div>
+	</body>
+	<footer>View project in <a href="https://github.com/rogerneb/avenger-invasion">github</a>.</footer>
+</html>
