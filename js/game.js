@@ -64,16 +64,13 @@ $(document).ready(function() {
         };
 
         this.collision = function(){ //checks if the shot collision with a bad guy
-          //this if must be upgraded. It's confusing...
-          if ((parseInt(Badguys[0].x) <= parseInt(Shipshot.x) && parseInt(Badguys[0].x)+32 >= parseInt(Shipshot.x)) && (parseInt(Badguys[0].y) <= parseInt(Shipshot.y) && parseInt(Badguys[0].y)+23 >= parseInt(Shipshot.y))){
-            Badguys[0].doa = "dead";
-            //delete Badguys[0];
-            Badguys[0].spritenum = 2;
-            Shipshot.status=false;
-            //Shipshot.x = Ship.x;
-            console.log("bingo");
-          }else{
-            //console.log("No collision");
+          if (Badguys[0].doa == "alive") { //only if its alive
+            //this if must be upgraded. It's confusing...
+            if ((parseInt(Badguys[0].x) <= parseInt(Shipshot.x) && parseInt(Badguys[0].x)+32 >= parseInt(Shipshot.x)) && (parseInt(Badguys[0].y) <= parseInt(Shipshot.y) && parseInt(Badguys[0].y)+23 >= parseInt(Shipshot.y))){
+              Badguys[0].doa = "dead"; //mark as dead
+              Badguys[0].spritenum = 2; //xplosion sprite
+              Shipshot.status=false; //the shipshot disapears
+            }
           }
         }
     }
@@ -107,14 +104,45 @@ $(document).ready(function() {
         };
 
         //BASIC MOVING
-        this.move = function(){
-            if (this.y >= 400) { this.y = 400; this.mode = "upload";} //badguy changes download to upload
-            else if (this.y <= 50) {this.y = 50; this.mode = "download";} //badguy changes upload to download
-            //DOWNLOAD//
-            if (this.mode == "download")  {
-                //Move up, down, left or right the Bad Guy depending his direction
-                if (this.ydirection == "down"){
-                    this.y = this.y + this.speed;
+
+        this.move = function() {
+          if (this.doa == "alive") { //only moving if its alive
+              if (this.y >= 400) { this.y = 400; this.mode = "upload";} //badguy changes download to upload
+              else if (this.y <= 50) {this.y = 50; this.mode = "download";} //badguy changes upload to download
+              //DOWNLOAD//
+              if (this.mode == "download")  {
+                  //Move up, down, left or right the Bad Guy depending his direction
+                  if (this.ydirection == "down"){
+                      this.y = this.y + this.speed;
+                  }else{
+                      if (this.xdirection == "right"){
+                          this.x = this.x + this.speed;
+                      }else if (this.xdirection == "left"){
+                          this.x = this.x - this.speed;
+                      }
+                  }
+                  //controls vertical moving.
+                  if (this.y - this.y_memory >= this.falling) {
+                      //console.log(this.y+" - "+this.y_memory);
+                      this.ydirection = "none";
+                  }
+                  //Screen limits detection and UP/DOWN selection
+                  if(this.x >= screen_limit_h_r){ //right limit
+                    Badguys[0].x = Badguys[0].x - 3; //escape from screen limits
+                    Badguys[0].y_memory = Badguys[0].y;
+                    Badguys[0].xdirection = "left";
+                    Badguys[0].ydirection = "down";
+                  }else if (this.x <= screen_limit_h_l){ //left limit
+                    Badguys[0].x = Badguys[0].x + 3; //escape from screen limits
+                    Badguys[0].y_memory = Badguys[0].y;
+                    Badguys[0].xdirection = "right";
+                    Badguys[0].ydirection = "down";
+                  }
+              //END DOWNLOAD//
+              //UPLOAD//
+              }else if (this.mode == "upload"){
+                if (this.ydirection == "up"){
+                    this.y = this.y - this.speed;
                 }else{
                     if (this.xdirection == "right"){
                         this.x = this.x + this.speed;
@@ -123,7 +151,7 @@ $(document).ready(function() {
                     }
                 }
                 //controls vertical moving.
-                if (this.y - this.y_memory >= this.falling) {
+                if (this.y_memory - this.y >= this.falling) {
                     //console.log(this.y+" - "+this.y_memory);
                     this.ydirection = "none";
                 }
@@ -132,45 +160,18 @@ $(document).ready(function() {
                   Badguys[0].x = Badguys[0].x - 3; //escape from screen limits
                   Badguys[0].y_memory = Badguys[0].y;
                   Badguys[0].xdirection = "left";
-                  Badguys[0].ydirection = "down";
+                  Badguys[0].ydirection = "up";
                 }else if (this.x <= screen_limit_h_l){ //left limit
                   Badguys[0].x = Badguys[0].x + 3; //escape from screen limits
                   Badguys[0].y_memory = Badguys[0].y;
                   Badguys[0].xdirection = "right";
-                  Badguys[0].ydirection = "down";
+                  Badguys[0].ydirection = "up";
                 }
-            //END DOWNLOAD//
-            //UPLOAD//
-            }else if (this.mode == "upload"){
-              if (this.ydirection == "up"){
-                  this.y = this.y - this.speed;
-              }else{
-                  if (this.xdirection == "right"){
-                      this.x = this.x + this.speed;
-                  }else if (this.xdirection == "left"){
-                      this.x = this.x - this.speed;
-                  }
               }
-              //controls vertical moving.
-              if (this.y_memory - this.y >= this.falling) {
-                  //console.log(this.y+" - "+this.y_memory);
-                  this.ydirection = "none";
-              }
-              //Screen limits detection and UP/DOWN selection
-              if(this.x >= screen_limit_h_r){ //right limit
-                Badguys[0].x = Badguys[0].x - 3; //escape from screen limits
-                Badguys[0].y_memory = Badguys[0].y;
-                Badguys[0].xdirection = "left";
-                Badguys[0].ydirection = "up";
-              }else if (this.x <= screen_limit_h_l){ //left limit
-                Badguys[0].x = Badguys[0].x + 3; //escape from screen limits
-                Badguys[0].y_memory = Badguys[0].y;
-                Badguys[0].xdirection = "right";
-                Badguys[0].ydirection = "up";
-              }
-            }
-            //END UPLOAD//
+              //END UPLOAD//
+          }
         };
+        //END BASIC MOVING //
 
         this.changesprite = function(){
             if (this.doa == "alive"){
@@ -180,6 +181,8 @@ $(document).ready(function() {
                   else if(this.spritenum=1){this.spritenum=0;}
               }
               this.t++;
+            }else {
+              this.spritenum=2;
             }
         };
     }
