@@ -62,6 +62,20 @@ $(document).ready(function() {
             //drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
             context.drawImage(this.image,this.x,this.y);
         };
+
+        this.collision = function(){ //checks if the shot collision with a bad guy
+          //this if must be upgraded. It's confusing...
+          if ((parseInt(Badguys[0].x) <= parseInt(Shipshot.x) && parseInt(Badguys[0].x)+32 >= parseInt(Shipshot.x)) && (parseInt(Badguys[0].y) <= parseInt(Shipshot.y) && parseInt(Badguys[0].y)+23 >= parseInt(Shipshot.y))){
+            Badguys[0].doa = "dead";
+            //delete Badguys[0];
+            Badguys[0].spritenum = 2;
+            Shipshot.status=false;
+            //Shipshot.x = Ship.x;
+            console.log("bingo");
+          }else{
+            //console.log("No collision");
+          }
+        }
     }
 
     //badguys
@@ -86,11 +100,10 @@ $(document).ready(function() {
         this.print = function(){
             //drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
             //context.drawImage(this.image,this.x,this.y);
-            var sprites =[0,32]; //array sprite points
+            var sprites =[0,32,64]; //array sprite points
             context.drawImage(this.image,sprites[this.spritenum],0,this.width,this.height,this.x,this.y,this.width,this.height);
             this.move();//move the badguy
             this.changesprite(); //animate
-
         };
 
         //BASIC MOVING
@@ -111,7 +124,7 @@ $(document).ready(function() {
                 }
                 //controls vertical moving.
                 if (this.y - this.y_memory >= this.falling) {
-                    console.log(this.y+" - "+this.y_memory);
+                    //console.log(this.y+" - "+this.y_memory);
                     this.ydirection = "none";
                 }
                 //Screen limits detection and UP/DOWN selection
@@ -140,7 +153,7 @@ $(document).ready(function() {
               }
               //controls vertical moving.
               if (this.y_memory - this.y >= this.falling) {
-                  console.log(this.y+" - "+this.y_memory);
+                  //console.log(this.y+" - "+this.y_memory);
                   this.ydirection = "none";
               }
               //Screen limits detection and UP/DOWN selection
@@ -159,14 +172,15 @@ $(document).ready(function() {
             //END UPLOAD//
         };
 
-
         this.changesprite = function(){
-            if (this.t >= this.timing) {
-                this.t=0;
-                if(this.spritenum==0){this.spritenum=1;}
-                else if(this.spritenum=1){this.spritenum=0;}
+            if (this.doa == "alive"){
+              if (this.t >= this.timing) {
+                  this.t=0;
+                  if(this.spritenum==0){this.spritenum=1;}
+                  else if(this.spritenum=1){this.spritenum=0;}
+              }
+              this.t++;
             }
-            this.t++;
         };
     }
 
@@ -214,9 +228,6 @@ $(document).ready(function() {
     //Create the shot
     Shipshot = new shipshot(500, 500, true);
 
-    //create a badguy demo
-    var badguynumber = Math.floor(Math.random() * 6) + 1; //Random color badguy
-    var imagebadguy = "badguy0"+badguynumber;
     badguysarmy();
     //Badguy = new badguy(100, 0, imagebadguy);
     //END CREATE OBJECTS
@@ -293,6 +304,7 @@ $(document).ready(function() {
       y=100;
       Badguys = [];
       var badguynumber = Math.floor(Math.random() * 6) + 1; //Random color badguy
+      badguynumber = 1; //temporary force green guy
       var imagebadguy = "badguy0"+badguynumber;
       Badguys[0] = new badguy(x, y, imagebadguy);
     }
@@ -307,6 +319,8 @@ $(document).ready(function() {
             Shipshot.x = Ship.x+24; //+25 pixels correction
         }
         if (Shipshot.y <= 0) { Shipshot.status=false;} //the Shipshot was outside of the screen limits then its false
+
+        Shipshot.collision();
     }
 
     //show log
@@ -386,10 +400,7 @@ $(document).ready(function() {
         showlog();
         shipshotcontrolstatus();
         Ship.print(); //print the ship
-
-        Badguys[0].print();
-
-        //Badguy.print(); //print the badguys
+        Badguys[0].print(); //print the bad guys
         time = Date.now();
     }
     var time = Date.now();
