@@ -68,7 +68,7 @@ $(document).ready(function() {
             //this if must be upgraded. It's confusing...
             if ((parseInt(Badguys[0].x) <= parseInt(Shipshot.x) && parseInt(Badguys[0].x)+32 >= parseInt(Shipshot.x)) && (parseInt(Badguys[0].y) <= parseInt(Shipshot.y) && parseInt(Badguys[0].y)+23 >= parseInt(Shipshot.y))){
               Badguys[0].doa = "dead"; //mark as dead
-              Badguys[0].spritenum = 2; //xplosion sprite
+              Badguys[0].spritenum = 2; //destroyed sprite 
               Shipshot.status=false; //the shipshot disapears
             }
           }
@@ -97,7 +97,7 @@ $(document).ready(function() {
         this.print = function(){
             //drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
             //context.drawImage(this.image,this.x,this.y);
-            var sprites =[0,32,64]; //array sprite points
+            var sprites =[0,32,64,96]; //array sprite points
             context.drawImage(this.image,sprites[this.spritenum],0,this.width,this.height,this.x,this.y,this.width,this.height);
             this.move();//move the badguy
             this.changesprite(); //animate
@@ -174,15 +174,15 @@ $(document).ready(function() {
         //END BASIC MOVING //
 
         this.changesprite = function(){
-            if (this.doa == "alive"){
+            if (this.doa == "alive"){ //animation if its alive
               if (this.t >= this.timing) {
                   this.t=0;
                   if(this.spritenum==0){this.spritenum=1;}
                   else if(this.spritenum=1){this.spritenum=0;}
               }
               this.t++;
-            }else {
-              this.spritenum=2;
+            }else if (this.doa == "dead"){ //animation when dies
+              this.spritenum=3;
             }
         };
     }
@@ -301,7 +301,7 @@ $(document).ready(function() {
 
     }
 
-    //Create and recolocate Badguys Army
+    //Create Badguys Army
     function badguysarmy() {
       x=50;
       y=100;
