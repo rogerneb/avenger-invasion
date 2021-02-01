@@ -28,6 +28,9 @@ $(document).ready(function() {
 
     //GAME VARS
     var score = 0;
+    var cols_of_bad_guys = 9; //num of bad guys per cols
+    var rows_of_bad_guys = 3; //num of bad guys per rows
+    var separation = 64; //separation between each badguy
 
 
 
@@ -64,12 +67,14 @@ $(document).ready(function() {
         };
 
         this.collision = function(){ //checks if the shot collision with a bad guy
-          if (Badguys[0].doa == "alive") { //only if its alive
-            //this if must be upgraded. It's confusing...
-            if ((parseInt(Badguys[0].x) <= parseInt(Shipshot.x) && parseInt(Badguys[0].x)+32 >= parseInt(Shipshot.x)) && (parseInt(Badguys[0].y) <= parseInt(Shipshot.y) && parseInt(Badguys[0].y)+23 >= parseInt(Shipshot.y))){
-              Badguys[0].doa = "dead"; //mark as dead
-              Badguys[0].spritenum = 2; //destroyed sprite 
-              Shipshot.status=false; //the shipshot disapears
+          for (n=0; n<Badguys.length; n++){
+            if (Badguys[n].doa == "alive") { //only if its alive
+              //this if must be upgraded. It's confusing...
+              if ((parseInt(Badguys[n].x) <= parseInt(Shipshot.x) && parseInt(Badguys[n].x)+32 >= parseInt(Shipshot.x)) && (parseInt(Badguys[n].y) <= parseInt(Shipshot.y) && parseInt(Badguys[n].y)+23 >= parseInt(Shipshot.y))){
+                Badguys[n].doa = "dead"; //mark as dead
+                Badguys[n].spritenum = 2; //destroyed sprite
+                Shipshot.status=false; //the shipshot disapears
+              }
             }
           }
         }
@@ -99,78 +104,14 @@ $(document).ready(function() {
             //context.drawImage(this.image,this.x,this.y);
             var sprites =[0,32,64,96]; //array sprite points
             context.drawImage(this.image,sprites[this.spritenum],0,this.width,this.height,this.x,this.y,this.width,this.height);
-            this.move();//move the badguy
+            //this.move();//move the badguy
+            //badguyscontrolstatus();
             this.changesprite(); //animate
         };
 
         //BASIC MOVING
-
         this.move = function() {
-          if (this.doa == "alive") { //only moving if its alive
-              if (this.y >= 400) { this.y = 400; this.mode = "upload";} //badguy changes download to upload
-              else if (this.y <= 50) {this.y = 50; this.mode = "download";} //badguy changes upload to download
-              //DOWNLOAD//
-              if (this.mode == "download")  {
-                  //Move up, down, left or right the Bad Guy depending his direction
-                  if (this.ydirection == "down"){
-                      this.y = this.y + this.speed;
-                  }else{
-                      if (this.xdirection == "right"){
-                          this.x = this.x + this.speed;
-                      }else if (this.xdirection == "left"){
-                          this.x = this.x - this.speed;
-                      }
-                  }
-                  //controls vertical moving.
-                  if (this.y - this.y_memory >= this.falling) {
-                      //console.log(this.y+" - "+this.y_memory);
-                      this.ydirection = "none";
-                  }
-                  //Screen limits detection and UP/DOWN selection
-                  if(this.x >= screen_limit_h_r){ //right limit
-                    Badguys[0].x = Badguys[0].x - 3; //escape from screen limits
-                    Badguys[0].y_memory = Badguys[0].y;
-                    Badguys[0].xdirection = "left";
-                    Badguys[0].ydirection = "down";
-                  }else if (this.x <= screen_limit_h_l){ //left limit
-                    Badguys[0].x = Badguys[0].x + 3; //escape from screen limits
-                    Badguys[0].y_memory = Badguys[0].y;
-                    Badguys[0].xdirection = "right";
-                    Badguys[0].ydirection = "down";
-                  }
-              //END DOWNLOAD//
-              //UPLOAD//
-              }else if (this.mode == "upload"){
-                if (this.ydirection == "up"){
-                    this.y = this.y - this.speed;
-                }else{
-                    if (this.xdirection == "right"){
-                        this.x = this.x + this.speed;
-                    }else if (this.xdirection == "left"){
-                        this.x = this.x - this.speed;
-                    }
-                }
-                //controls vertical moving.
-                if (this.y_memory - this.y >= this.falling) {
-                    //console.log(this.y+" - "+this.y_memory);
-                    this.ydirection = "none";
-                }
-                //Screen limits detection and UP/DOWN selection
-                if(this.x >= screen_limit_h_r){ //right limit
-                  Badguys[0].x = Badguys[0].x - 3; //escape from screen limits
-                  Badguys[0].y_memory = Badguys[0].y;
-                  Badguys[0].xdirection = "left";
-                  Badguys[0].ydirection = "up";
-                }else if (this.x <= screen_limit_h_l){ //left limit
-                  Badguys[0].x = Badguys[0].x + 3; //escape from screen limits
-                  Badguys[0].y_memory = Badguys[0].y;
-                  Badguys[0].xdirection = "right";
-                  Badguys[0].ydirection = "up";
-                }
-              }
-              //END UPLOAD//
-          }
-        };
+        }
         //END BASIC MOVING //
 
         this.changesprite = function(){
@@ -230,13 +171,9 @@ $(document).ready(function() {
 
     //Create the shot
     Shipshot = new shipshot(500, 500, true);
-
-    badguysarmy();
+    badguysarmy(cols_of_bad_guys, rows_of_bad_guys);
     //Badguy = new badguy(100, 0, imagebadguy);
     //END CREATE OBJECTS
-
-
-
 
     //---------------------------FUNCTIONS------------------------------------
     function update(mod) {
@@ -244,14 +181,14 @@ $(document).ready(function() {
         if (37 in keysDown) { //left
             Ship.x -= Ship.speed * mod;
             Ship.image = document.getElementById('ship_l');
-        }if (38 in keysDown) {//up
+        /*}if (38 in keysDown) {//up
             Ship.y -= Ship.speed * mod;
-            Ship.image = document.getElementById('ship_u');
+            Ship.image = document.getElementById('ship_u');*/
         }if (39 in keysDown) {//right
             Ship.x += Ship.speed * mod;
             Ship.image = document.getElementById('ship_r');
-        }if (40 in keysDown) {//down
-            Ship.y += Ship.speed * mod;
+        /*}if (40 in keysDown) {//down
+            Ship.y += Ship.speed * mod;*/
         }if ((38 in keysDown) && (39 in keysDown)){ //up right
             Ship.image = document.getElementById('ship_ur');
         }if ((38 in keysDown) && (37 in keysDown)){ //up left
@@ -302,14 +239,94 @@ $(document).ready(function() {
     }
 
     //Create Badguys Army
-    function badguysarmy() {
+    function badguysarmy(cols, rows) {
       x=50;
       y=100;
+      num = 0;
       Badguys = [];
-      var badguynumber = Math.floor(Math.random() * 6) + 1; //Random color badguy
-      badguynumber = 1; //temporary force green guy
-      var imagebadguy = "badguy0"+badguynumber;
-      Badguys[0] = new badguy(x, y, imagebadguy);
+      for (r=0; r<=rows; r++){ //rows of badguys
+        for (c=0; c<=cols; c++){ //columns of badguys
+          var badguynumber = Math.floor(Math.random() * 6) + 1; //Random color badguy
+          //var badguynumber = 1; //temporary force green guy
+          var imagebadguy = "badguy0"+badguynumber;
+          Badguys[num] = new badguy(x, y, imagebadguy); //creation of a badguy
+          x=x+separation;
+          num++;
+        }
+        x = 50; //in each new row the x returns to its initial value
+        y=y+separation;
+      }
+    }
+
+    //badguys move control and status
+    function badguyscontrolstatus (){
+      for (n=0; n<Badguys.length; n++){
+        if (Badguys[n].doa == "alive") { //only moving if its alive
+            console.log("im alive");
+          if (Badguys[n].y >= 400) { Badguys[n].y = 400; Badguys[n].mode = "upload";} //badguy changes download to upload
+          else if (Badguys[n].y <= 50) {Badguys[n].y = 50; Badguys[n].mode = "download";} //badguy changes upload to download
+          //DOWNLOAD//
+          if (Badguys[n].mode == "download")  {
+              //Move up, down, left or right the Bad Guy depending his direction
+              if (Badguys[n].ydirection == "down"){
+                  Badguys[n].y = Badguys[n].y + Badguys[n].speed;
+              }else{
+                  if (Badguys[n].xdirection == "right"){
+                      Badguys[n].x = Badguys[n].x + Badguys[n].speed;
+                  }else if (Badguys[n].xdirection == "left"){
+                      Badguys[n].x = Badguys[n].x - Badguys[n].speed;
+                  }
+              }
+              //controls vertical moving.
+              if (Badguys[n].y - Badguys[n].y_memory >= Badguys[n].falling) {
+                  //console.log(Badguys[n].y+" - "+Badguys[n].y_memory);
+                  Badguys[n].ydirection = "none";
+              }
+              //Screen limits detection and UP/DOWN selection
+              if(Badguys[n].x >= screen_limit_h_r){ //right limit
+                Badguys[n].x = Badguys[n].x - 3; //escape from screen limits
+                Badguys[n].y_memory = Badguys[n].y;
+                Badguys[n].xdirection = "left";
+                Badguys[n].ydirection = "down";
+              }else if (Badguys[n].x <= screen_limit_h_l){ //left limit
+                Badguys[n].x = Badguys[n].x + 3; //escape from screen limits
+                Badguys[n].y_memory = Badguys[n].y;
+                Badguys[n].xdirection = "right";
+                Badguys[n].ydirection = "down";
+              }
+          //END DOWNLOAD//
+          //UPLOAD//
+          }else if (Badguys[n].mode == "upload"){
+            if (Badguys[n].ydirection == "up"){
+                Badguys[n].y = Badguys[n].y - Badguys[n].speed;
+            }else{
+                if (Badguys[n].xdirection == "right"){
+                    Badguys[n].x = Badguys[n].x + Badguys[n].speed;
+                }else if (Badguys[n].xdirection == "left"){
+                    Badguys[n].x = Badguys[n].x - Badguys[n].speed;
+                }
+            }
+            //controls vertical moving.
+            if (Badguys[n].y_memory - Badguys[n].y >= Badguys[n].falling) {
+                //console.log(Badguys[n].y+" - "+Badguys[n].y_memory);
+                Badguys[n].ydirection = "none";
+            }
+            //Screen limits detection and UP/DOWN selection
+            if(Badguys[n].x >= screen_limit_h_r){ //right limit
+              Badguys[n].x = Badguys[n].x - 3; //escape from screen limits
+              Badguys[n].y_memory = Badguys[n].y;
+              Badguys[n].xdirection = "left";
+              Badguys[n].ydirection = "up";
+            }else if (Badguys[n].x <= screen_limit_h_l){ //left limit
+              Badguys[n].x =Badguys[n].x + 3; //escape from screen limits
+              Badguys[n].y_memory = Badguys[n].y;
+              Badguys[n].xdirection = "right";
+              Badguys[n].ydirection = "up";
+            }
+          }
+        }
+        //END UPLOAD//
+      }
     }
 
     //shipshot control status and move
@@ -322,7 +339,6 @@ $(document).ready(function() {
             Shipshot.x = Ship.x+24; //+25 pixels correction
         }
         if (Shipshot.y <= 0) { Shipshot.status=false;} //the Shipshot was outside of the screen limits then its false
-
         Shipshot.collision();
     }
 
@@ -402,8 +418,13 @@ $(document).ready(function() {
         scroll();
         showlog();
         shipshotcontrolstatus();
+        badguyscontrolstatus();
         Ship.print(); //print the ship
-        Badguys[0].print(); //print the bad guys
+
+        //print the bad guys
+        for (n=0; n<Badguys.length; n++){
+          Badguys[n].print();
+        }
         time = Date.now();
     }
     var time = Date.now();
