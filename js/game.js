@@ -22,7 +22,7 @@ $(document).ready(function() {
 
     //screen limits
     var screen_limit_h_l = 5;
-    var screen_limit_h_r = canvas.width - 60;
+    var screen_limit_h_r = canvas.width - 45;
     var screen_limit_v_up = 10;
     var screen_limit_v_down = canvas.height - 60;
 
@@ -89,7 +89,7 @@ $(document).ready(function() {
         this.ydirection="none";   //vertical direction: up, down, none
         this.xdirection="right";  //horizontal direction: left, right, none
         this.y_memory=0;        //the bad guy remembers in witch point starts falling
-        this.falling = 40;      //pixels badguy advances falling.
+        this.falling = 50;      //pixels badguy advances falling.
         this.mode = "download";   //Download: Bad guy fallings to the player | Upload: Bad guy backs to the top
         this.mood = "normal";     //Normal: that's it, normal mood. Angry: Motherfucker BadGuy
         this.doa = "alive";       //Dead or alive.
@@ -262,8 +262,17 @@ $(document).ready(function() {
     function badguyscontrolstatus (){
       for (n=0; n<Badguys.length; n++){
         if (Badguys[n].doa == "alive") { //only moving if its alive
-          if (Badguys[n].y >= 370) { Badguys[n].y = 370; Badguys[n].mode = "upload";} //badguy changes download to upload
-          else if (Badguys[n].y <= 50) {Badguys[n].y = 50; Badguys[n].mode = "download";} //badguy changes upload to download
+          if (Badguys[n].y >= 355) { //badguys changes download to upload
+            for (m=0; m<Badguys.length; m++){
+              //Badguys[m].y = Badguys[m].y - 1;
+              Badguys[m].mode = "upload";
+            }
+          } else if (Badguys[n].y <= 50) { //badguy changes upload to download
+            for (m=0; m<Badguys.length; m++){
+              //Badguys[m].y = Badguys[m].y + 1;
+              Badguys[m].mode = "download";
+            }
+          }
           //DOWNLOAD//
           if (Badguys[n].mode == "download")  {
               //Move up, down, left or right the Bad Guy depending his direction
@@ -283,15 +292,19 @@ $(document).ready(function() {
               }
               //Screen limits detection and UP/DOWN selection
               if(Badguys[n].x >= screen_limit_h_r){ //right limit
-                Badguys[n].x = screen_limit_h_r - 1; //escape from screen limits
-                Badguys[n].y_memory = Badguys[n].y;
-                Badguys[n].xdirection = "left";
-                Badguys[n].ydirection = "down";
+                for (m=0; m<Badguys.length; m++){
+                  Badguys[m].x = Badguys[m].x - 1; //escape from screen limits
+                  Badguys[m].y_memory = Badguys[m].y;
+                  Badguys[m].xdirection = "left";
+                  Badguys[m].ydirection = "down";
+                }
               }else if (Badguys[n].x <= screen_limit_h_l){ //left limit
-                Badguys[n].x = screen_limit_h_l + 1; //escape from screen limits
-                Badguys[n].y_memory = Badguys[n].y;
-                Badguys[n].xdirection = "right";
-                Badguys[n].ydirection = "down";
+                for (m=0; m<Badguys.length; m++){
+                  Badguys[m].x = Badguys[m].x + 1; //escape from screen limits
+                  Badguys[m].y_memory = Badguys[m].y;
+                  Badguys[m].xdirection = "right";
+                  Badguys[m].ydirection = "down";
+                }
               }
           //END DOWNLOAD//
           //UPLOAD//
@@ -312,15 +325,19 @@ $(document).ready(function() {
             }
             //Screen limits detection and UP/DOWN selection
             if(Badguys[n].x >= screen_limit_h_r){ //right limit
-              Badguys[n].x = screen_limit_h_r - 1; //escape from screen limits
-              Badguys[n].y_memory = Badguys[n].y;
-              Badguys[n].xdirection = "left";
-              Badguys[n].ydirection = "up";
+              for (m=0; m<Badguys.length; m++){
+                Badguys[m].x = Badguys[m].x - 1; //escape from screen limits
+                Badguys[m].y_memory = Badguys[m].y;
+                Badguys[m].xdirection = "left";
+                Badguys[m].ydirection = "up";
+              }
             }else if (Badguys[n].x <= screen_limit_h_l){ //left limit
-              Badguys[n].x = screen_limit_h_l + 1; //escape from screen limits
-              Badguys[n].y_memory = Badguys[n].y;
-              Badguys[n].xdirection = "right";
-              Badguys[n].ydirection = "up";
+              for (m=0; m<Badguys.length; m++){
+                Badguys[m].x = Badguys[m].x + 1; //escape from screen limits
+                Badguys[m].y_memory = Badguys[m].y;
+                Badguys[m].xdirection = "right";
+                Badguys[m].ydirection = "up";
+              }
             }
           }
         }
@@ -392,12 +409,12 @@ $(document).ready(function() {
                 "";
 
 
-            badguyx=Badguys[0].x.toFixed(2);
-            badguyy=Badguys[0].y.toFixed(2);
-            badguyxdirect=Badguys[0].xdirection;
-            badguyydirect=Badguys[0].ydirection;
-            badguymode = Badguys[0].mode;
-            badguyimage = Badguys[0].image;
+            badguyx=Badguys[39].x.toFixed(2);
+            badguyy=Badguys[39].y.toFixed(2);
+            badguyxdirect=Badguys[39].xdirection;
+            badguyydirect=Badguys[39].ydirection;
+            badguymode = Badguys[39].mode;
+            badguyimage = Badguys[39].image;
 
             //Bad Guy log
             document.getElementById('badguylog').innerHTML =
