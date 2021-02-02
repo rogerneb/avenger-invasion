@@ -28,10 +28,10 @@ $(document).ready(function() {
 
     //GAME VARS
     var score = 0;
-    var cols_of_bad_guys = 9; //num of bad guys per cols
-    var rows_of_bad_guys = 3; //num of bad guys per rows
-    var separation = 64; //separation between each badguy
-
+    var cols_of_bad_guys = 10; //num of bad guys per cols 10
+    var rows_of_bad_guys = 3; //num of bad guys per rows 3
+    var separation_x = 45; //separation between each badguy X
+    var separation_y = 35; //separation between each badguy Y
 
 
 
@@ -89,7 +89,7 @@ $(document).ready(function() {
         this.ydirection="none";   //vertical direction: up, down, none
         this.xdirection="right";  //horizontal direction: left, right, none
         this.y_memory=0;        //the bad guy remembers in witch point starts falling
-        this.falling = 50;      //pixels badguy advances falling.
+        this.falling = 40;      //pixels badguy advances falling.
         this.mode = "download";   //Download: Bad guy fallings to the player | Upload: Bad guy backs to the top
         this.mood = "normal";     //Normal: that's it, normal mood. Angry: Motherfucker BadGuy
         this.doa = "alive";       //Dead or alive.
@@ -240,8 +240,8 @@ $(document).ready(function() {
 
     //Create Badguys Army
     function badguysarmy(cols, rows) {
-      x=50;
-      y=100;
+      x=20;
+      y=50;
       num = 0;
       Badguys = [];
       for (r=0; r<=rows; r++){ //rows of badguys
@@ -250,11 +250,11 @@ $(document).ready(function() {
           //var badguynumber = 1; //temporary force green guy
           var imagebadguy = "badguy0"+badguynumber;
           Badguys[num] = new badguy(x, y, imagebadguy); //creation of a badguy
-          x=x+separation;
+          x=x+separation_x;
           num++;
         }
-        x = 50; //in each new row the x returns to its initial value
-        y=y+separation;
+        x = 20; //in each new row the x returns to its initial value
+        y=y+separation_y;
       }
     }
 
@@ -262,8 +262,7 @@ $(document).ready(function() {
     function badguyscontrolstatus (){
       for (n=0; n<Badguys.length; n++){
         if (Badguys[n].doa == "alive") { //only moving if its alive
-            console.log("im alive");
-          if (Badguys[n].y >= 400) { Badguys[n].y = 400; Badguys[n].mode = "upload";} //badguy changes download to upload
+          if (Badguys[n].y >= 370) { Badguys[n].y = 370; Badguys[n].mode = "upload";} //badguy changes download to upload
           else if (Badguys[n].y <= 50) {Badguys[n].y = 50; Badguys[n].mode = "download";} //badguy changes upload to download
           //DOWNLOAD//
           if (Badguys[n].mode == "download")  {
@@ -284,12 +283,12 @@ $(document).ready(function() {
               }
               //Screen limits detection and UP/DOWN selection
               if(Badguys[n].x >= screen_limit_h_r){ //right limit
-                Badguys[n].x = Badguys[n].x - 3; //escape from screen limits
+                Badguys[n].x = screen_limit_h_r - 1; //escape from screen limits
                 Badguys[n].y_memory = Badguys[n].y;
                 Badguys[n].xdirection = "left";
                 Badguys[n].ydirection = "down";
               }else if (Badguys[n].x <= screen_limit_h_l){ //left limit
-                Badguys[n].x = Badguys[n].x + 3; //escape from screen limits
+                Badguys[n].x = screen_limit_h_l + 1; //escape from screen limits
                 Badguys[n].y_memory = Badguys[n].y;
                 Badguys[n].xdirection = "right";
                 Badguys[n].ydirection = "down";
@@ -313,12 +312,12 @@ $(document).ready(function() {
             }
             //Screen limits detection and UP/DOWN selection
             if(Badguys[n].x >= screen_limit_h_r){ //right limit
-              Badguys[n].x = Badguys[n].x - 3; //escape from screen limits
+              Badguys[n].x = screen_limit_h_r - 1; //escape from screen limits
               Badguys[n].y_memory = Badguys[n].y;
               Badguys[n].xdirection = "left";
               Badguys[n].ydirection = "up";
             }else if (Badguys[n].x <= screen_limit_h_l){ //left limit
-              Badguys[n].x =Badguys[n].x + 3; //escape from screen limits
+              Badguys[n].x = screen_limit_h_l + 1; //escape from screen limits
               Badguys[n].y_memory = Badguys[n].y;
               Badguys[n].xdirection = "right";
               Badguys[n].ydirection = "up";
