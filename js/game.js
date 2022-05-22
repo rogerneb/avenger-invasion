@@ -1,3 +1,4 @@
+//some day I'll be done with this shit
 $(document).ready(function() {
     var Canvas_class=function(id) {
         this._canvas = $("#"+id); //Privat
