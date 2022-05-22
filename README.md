@@ -4,4 +4,4 @@ Test it in: https://molokoserver.com/avenger-invasion/
 
 CONTROLS:
 Move: Directional keys
-Shoot: A key
+Shoot: A key.
